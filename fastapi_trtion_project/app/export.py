@@ -13,6 +13,3 @@ model.add_callback("on_export_end", export_cb)
 
 # Экспорт модели с указанием opset версии 12
 onnx_file = model.export(format="onnx", dynamic=True, opset=12)
-
-
-print(metadata)
