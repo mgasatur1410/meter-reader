@@ -140,7 +140,7 @@ if __name__ == "__main__":
     if detect_result.obb is not None:
         try:
             cropped_img = crop_rotate_obb(detect_result)
-            print("Обрезка по OBB (5% расширение).")
+            print("Обрезка по OBB (1% расширение).")
         except Exception as e:
             print("Ошибка при OBB:", e)
             if detect_result.boxes.xyxy.shape[0] > 0:
