@@ -10,7 +10,6 @@ from app.inference import TritonRecognitionClient, crop_rotate_obb
 
 app = FastAPI(title="FastAPI wrapper для Triton", version="1.0")
 
-# Определяем базовую директорию проекта
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 frontend_dir = os.path.join(BASE_DIR, "frontend")
 
@@ -140,10 +139,8 @@ async def infer_image_endpoint(file: UploadFile = File(...)):
             cleaned_text = text.lstrip('0')
             if cleaned_text == "":
                 cleaned_text = "0"
-            # Возвращаем в том же виде [cleaned_text, conf], чтобы JS мог отобразить item[0]
             final_result.append([cleaned_text, conf])
 
-        # Если final_result пуст, сообщаем "Нет распознанных данных"
         if not final_result:
             final_result = [["Нет распознанных данных", 0.0]]
 
