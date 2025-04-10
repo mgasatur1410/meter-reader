@@ -1,0 +1,34 @@
+name: "my_model"
+platform: "onnxruntime_onnx"
+max_batch_size: 1
+
+input [
+  {
+    name: "x"
+    data_type: TYPE_FP32
+    format: FORMAT_NCHW
+    dims: [ 3, 32, -1 ]
+  }
+]
+
+output [
+  {
+    name: "softmax_0.tmp_0"
+    data_type: TYPE_FP32
+    dims: [ -1, 12 ]
+  }
+]
+
+parameters: {
+  key: "preprocess"
+  value: {
+    string_value: "DecodeImage(channel_first=false, img_mode=BGR); CTCLabelEncode; RecResizeImg(image_shape=[3,32,-1]); KeepKeys(keep_keys=[image,label,length])"
+  }
+}
+
+parameters: {
+  key: "postprocess"
+  value: {
+    string_value: "CTCLabelDecode(character_dict=['0','1','2','3','4','5','6','7','8','9','.'])"
+  }
+}
