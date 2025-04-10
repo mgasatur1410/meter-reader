@@ -5,9 +5,8 @@ import tritonclient.http as httpclient
 from ultralytics import YOLO
 
 
-# ------------------------------------------------
+
 # ФУНКЦИИ ДЛЯ OBB
-# ------------------------------------------------
 def get_rotated_bbox_corners(center_x, center_y, width, height, rotate):
     cos_angle = np.cos(rotate)
     sin_angle = np.sin(rotate)
@@ -48,10 +47,6 @@ def crop_rotate(image, center_x, center_y, width, height, rotation, dwidth=0):
     return cropped_image
 
 def crop_rotate_obb(obb_object):
-    """
-    Предполагается, что obb_object.obb.xywhr[0] = [x_center, y_center, w, h, theta].
-    Расширяем ширину на 5%.
-    """
     if obb_object.obb is None:
         raise ValueError("Данные OBB отсутствуют.")
     obb = obb_object.obb.xywhr[0].cpu().numpy()  # [x, y, w, h, theta]
@@ -60,9 +55,8 @@ def crop_rotate_obb(obb_object):
     return cropped
 
 
-# ------------------------------------------------
+
 # КЛАСС ДЛЯ РАСПОЗНАВАНИЯ (Triton)
-# ------------------------------------------------
 class TritonRecognitionClient:
     def __init__(self, server_url: str, model_name: str, input_name: str, output_name: str):
         self.server_url = server_url
@@ -110,9 +104,7 @@ class TritonRecognitionClient:
         return self.decode_ctc(preds_idx, preds_prob, remove_duplicates=True)
 
 
-# ------------------------------------------------
 # ГЛАВНАЯ ЛОГИКА
-# ------------------------------------------------
 if __name__ == "__main__":
     # 1) Модель детекции (локальный ONNX)
     model_path = "C:\\Users\\USER\\Desktop\\fastapi_trtion_project\\model_repository\\model_detect\\1\\model.onnx"
@@ -224,7 +216,7 @@ if __name__ == "__main__":
     result_text = recog_client.run_inference(input_for_rec)
     print("Результаты распознавания:", result_text)
 
-    # 7) (Опционально) Показать обрезку
+    # 7) Показать обрезку
     cv2.imshow("Обрезанная область", cropped_img)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
